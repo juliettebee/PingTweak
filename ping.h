@@ -17,6 +17,7 @@ int blue = 0;
 NSString* title = @"";
 int radius = 25;
 NSDictionary *settings;
+BOOL titleChange;
 
 @interface NCToggleControl : UIView
     @property (nonatomic,copy) NSString * title;

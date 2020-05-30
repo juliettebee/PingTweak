@@ -8,14 +8,17 @@ BOOL enabled;
     - (void)layoutSubviews {
         NSString *titlee = self.primaryText;
         // Checking if there's content in title, if not leaving default
-        if ([titlee length] == 0) {
-        } else {
-            self.title = titlee;
+        if (titleChange) {
+                if ([titlee length] == 0) {
+
+                } else {
+                    self.title = titlee;
+                }
+                if ([self.secondaryText length] <= 2) {
+                    self.secondaryText = @"";
+                }
         }
         %orig;
-        if ([self.secondaryText length] <= 2) {
-            self.secondaryText = @"";
-        }
         // Setting background colour
         NSArray<__kindof UIView *> *subs = self.subviews;
         UIView *transparent = subs[0];
@@ -74,7 +77,7 @@ BOOL enabled;
                     // Setting text with out Ellipsis
                     UILabel *t = self.subviews[0].subviews[0];
                     t.text = newTitle;
-                    t.minimumScaleFactor = 8./factLabel.font.pointSize;
+                    t.minimumScaleFactor = 8./t.font.pointSize;
                     t.adjustsFontSizeToFitWidth = YES;
                 }
             }
@@ -107,6 +110,7 @@ BOOL enabled;
     // And setting defaults
     settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/me.justnaaa.Pingpref.plist"] ?: [@{} mutableCopy];
     BOOL enabled = [[settings objectForKey:@"enableTweak"] ?: @(YES) boolValue];
+    titleChange = [[settings objectForKey:@"enableTitleChange"] ?: @(YES) boolValue];
     radius = [[settings objectForKey:@"notificationRadius"] ?: @10 intValue];
     red = [[settings objectForKey:@"redAmount"] ?: @39 intValue];
     green = [[settings objectForKey:@"greenAmount"] ?: @52 intValue];
