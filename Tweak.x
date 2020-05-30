@@ -7,6 +7,8 @@ BOOL enabled;
     %hook NCNotificationShortLookView
     - (void)layoutSubviews {
         NSString *titlee = self.primaryText;
+        NSString *appName = self.title;
+
         // Checking if there's content in title, if not leaving default
         if (titleChange) {
                 if ([titlee length] == 0) {
@@ -27,8 +29,20 @@ BOOL enabled;
 
         self.primaryText = @"";
 
-        // Setting notification colour
         int onTop = 1;
+
+        // Getting user defined per app notification colour
+        int thisred = [[settings objectForKey:[NSString stringWithFormat:@"redAmount%@", appName]] ?: @266 intValue];
+        int thisgreen = [[settings objectForKey:[NSString stringWithFormat:@"greenAmount%@", appName]] ?: @266 intValue];
+        int thisblue = [[settings objectForKey:[NSString stringWithFormat:@"blueAmount%@", appName]] ?: @266 intValue];
+        // then checking if they're null (equal or above 266)
+        if (thisred <= 255 && thisgreen <= 255 && thisblue <= 255) {
+                    red = thisred;
+                    green = thisgreen;
+                    blue = thisblue;
+                }
+        // Setting notification colour
+
         for (UIView *sub in subs) {
             if (onTop == 2) {
                 // Setting upper radius
@@ -55,6 +69,9 @@ BOOL enabled;
             }
             onTop = onTop + 1;
         }
+        red = [[settings objectForKey:@"redAmount"] ?: @39 intValue];
+        green = [[settings objectForKey:@"greenAmount"] ?: @52 intValue];
+        blue = [[settings objectForKey:@"blueAmount"] ?: @65 intValue];
     }
     %end
 
