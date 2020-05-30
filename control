@@ -1,10 +1,11 @@
 Package: me.justnaaa
 Name: PingTweak
 Version: 0.2
-Depends: mobilesubstrate, preferenceloader
+Depends: mobilesubstrate, preferenceloader, firmware (>= 13.0)
 Architecture: iphoneos-arm
 Icon: https://repo.justnaaa.me/images/ping.png
 Description: A simple tweak to edit your notifications!
 Maintainer: Juliette
 Author: Juliette
 Section: Tweaks
+Suite: stable

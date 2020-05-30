@@ -64,16 +64,18 @@ BOOL enabled;
             // Checking if it's an app name
             UIView *parent = self.superview.superview.superview.superview.superview.superview;
             NSString *description = parent.description;
-            NSString *originalTitle = self.title;
-            NSString *newTitle = [settings valueForKey:originalTitle];
-
+            NSString *newTitle = [settings valueForKey:self.title];
             if ([description containsString:@"<CSMainPageView"]) {
                 self.title = title;
             } else {
                 // Then checking if the user has defined a custom title, if they have set the title to that.
                 if (newTitle == nil) {
                 } else {
-                    self.title = newTitle;
+                    // Setting text with out Ellipsis
+                    UILabel *t = self.subviews[0].subviews[0];
+                    t.text = newTitle;
+                    t.minimumScaleFactor = 8./factLabel.font.pointSize;
+                    t.adjustsFontSizeToFitWidth = YES;
                 }
             }
         }
@@ -82,28 +84,28 @@ BOOL enabled;
     // Removing shadow in popup
 
     %hook NCNotificationViewController
-    - (void)viewDidLoad {
-        %orig;
-        self.hasShadow = false;
-    }
+        - (void)viewDidLoad {
+            %orig;
+            self.hasShadow = false;
+        }
     %end
 
     // Changing action cell colour
 
     %hook NCNotificationListCellActionButton
-    - (void)layoutSubviews {
-    UIView *actionButton = self.subviews[0];
-    actionButton.backgroundColor = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
-    // Need to do it first or it flickers in
-    %orig;
-    }
+        - (void)layoutSubviews {
+            UIView *actionButton = self.subviews[0];
+            actionButton.backgroundColor = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
+            // Need to do it first or it flickers in
+            %orig;
+        }
     %end
 %end
 
 %ctor {
     // Getting preferences and seeing if tweak is enabled
     // And setting defaults
-    NSDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/me.justnaaa.Pingpref.plist"] ?: [@{} mutableCopy];
+    settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/me.justnaaa.Pingpref.plist"] ?: [@{} mutableCopy];
     BOOL enabled = [[settings objectForKey:@"enableTweak"] ?: @(YES) boolValue];
     radius = [[settings objectForKey:@"notificationRadius"] ?: @10 intValue];
     red = [[settings objectForKey:@"redAmount"] ?: @39 intValue];
