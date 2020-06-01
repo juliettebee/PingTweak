@@ -64,29 +64,56 @@ BOOL enabled;
         // Setting notification colour
         for (UIView *sub in subs) {
             if (onTop == 2) {
-                // Setting upper radius
-                UIBezierPath *maskPath;
-                maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
-                                                 byRoundingCorners:(UIRectCornerTopRight |UIRectCornerTopLeft)
-                                                       cornerRadii:CGSizeMake(radius, radius)];
-                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-                maskLayer.frame =sub.bounds;
-                maskLayer.path = maskPath.CGPath;
-                sub.layer.mask = maskLayer;
-                sub.backgroundColor = color;
-
+                // Seeing if user has enabled transparent top
+                // If so making it transparent
+                if (noTop) {
+                    sub.opaque = false;
+                } else {
+                    if (noBottom) {
+                        // Setting upper radius
+                        UIBezierPath *maskPath;
+                        maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
+                                                         byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft | UIRectCornerTopRight |UIRectCornerTopLeft)
+                                                               cornerRadii:CGSizeMake(radius, radius)];
+                        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                        maskLayer.frame = sub.bounds;
+                        maskLayer.path = maskPath.CGPath;
+                        sub.layer.mask = maskLayer;
+                        sub.backgroundColor = color;
+                    } else {
+                        // Setting upper radius
+                        UIBezierPath *maskPath;
+                        maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
+                                                         byRoundingCorners:(UIRectCornerTopRight | UIRectCornerTopLeft)
+                                                               cornerRadii:CGSizeMake(radius, radius)];
+                        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                        maskLayer.frame = sub.bounds;
+                        maskLayer.path = maskPath.CGPath;
+                        sub.layer.mask = maskLayer;
+                        sub.backgroundColor = color;
+                    }
+                }
             } else {
                 // Setting bottom radius
                 UIBezierPath *maskPath;
-                maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
-                                                 byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft)
-                                                       cornerRadii:CGSizeMake(radius, radius)];
-                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-                maskLayer.frame = sub.bounds;
-                maskLayer.path = maskPath.CGPath;
-                sub.layer.mask = maskLayer;
-                sub.backgroundColor = color;
-
+                // Seeing if user has enabled transparent top
+                // If so make the top and bottom transparent
+                if (noTop) {
+                    maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
+                                byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft | UIRectCornerTopRight |UIRectCornerTopLeft)
+                                                           cornerRadii:CGSizeMake(radius, radius)];
+                } else if (noBottom){
+                    sub.opaque = false;
+                } else {
+                    maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
+                                byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft)
+                                                           cornerRadii:CGSizeMake(radius, radius)];
+                    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                    maskLayer.frame = sub.bounds;
+                    maskLayer.path = maskPath.CGPath;
+                    sub.layer.mask = maskLayer;
+                    sub.backgroundColor = color;
+                }
             }
             onTop = onTop + 1;
         }
@@ -168,6 +195,9 @@ BOOL enabled;
     green = [[settings objectForKey:@"greenAmount"] ?: @52 intValue];
     blue = [[settings objectForKey:@"blueAmount"] ?: @65 intValue];
     title = [NSString stringWithFormat:@"%@", [[settings valueForKey:@"notificationsText"] ?: @"Notifications" stringValue] ];
+    noTop = [[settings objectForKey:@"noTop"] ?: @(NO) boolValue];
+    noBottom = [[settings objectForKey:@"noBottom"] ?: @(NO) boolValue];
+
     if (enabled) {
         %init(ping);
     }

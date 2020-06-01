@@ -36,6 +36,30 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>me.justnaaa.Pingpref</string>
+			<key>key</key>
+			<string>noTop</string>
+			<key>label</key>
+			<string>Have top of notification transparent</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>me.justnaaa.Pingpref</string>
+			<key>key</key>
+			<string>noBottom</string>
+			<key>label</key>
+			<string>Have bottom of notification transparent</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>label</key>
 			<string>Set notification list header</string>

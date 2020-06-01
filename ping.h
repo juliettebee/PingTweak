@@ -18,6 +18,9 @@ NSString* title = @"";
 int radius = 25;
 NSDictionary *settings;
 BOOL titleChange;
+BOOL noTop;
+BOOL noBottom;
+
 
 @interface NCToggleControl : UIView
     @property (nonatomic,copy) NSString * title;
