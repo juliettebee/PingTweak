@@ -14,9 +14,6 @@ BOOL enabled;
         UIView *transparent = subs[0];
         [transparent setHidden:YES];
         self.layer.cornerRadius = radius;
-
-        self.primaryText = @"";
-
         int onTop = 1;
 
 
@@ -50,6 +47,7 @@ BOOL enabled;
                     alpha:1];
             }
         }
+
         // Getting user defined per app notification colour
         int thisred = [[settings objectForKey:[NSString stringWithFormat:@"redAmount%@", appName]] ?: @266 intValue];
         int thisgreen = [[settings objectForKey:[NSString stringWithFormat:@"greenAmount%@", appName]] ?: @266 intValue];
@@ -59,9 +57,11 @@ BOOL enabled;
             red = thisred;
             green = thisgreen;
             blue = thisblue;
-        }
-        // Setting notification colour
+            color = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
 
+        }
+
+        // Setting notification colour
         for (UIView *sub in subs) {
             if (onTop == 2) {
                 // Setting upper radius
@@ -85,7 +85,6 @@ sub.backgroundColor = color;
                 maskLayer.frame = sub.bounds;
                 maskLayer.path = maskPath.CGPath;
                 sub.layer.mask = maskLayer;
-//                sub.backgroundColor = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
 sub.backgroundColor = color;
 
             }

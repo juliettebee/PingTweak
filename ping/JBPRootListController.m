@@ -168,7 +168,7 @@
     }
     - (void)perAppBannerColour {
         // Creating alert with two text fields where user can enter the app name they want to change and the replacement
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set colour for a specific app." message:@"255 RGB colours. This only works if you have replace notification with app name disabled" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set colour for a specific app." message:@"255 RGB colours. This only works if you have replace notification with app name disabled. To set to reset colours have 266 be the value of the R,G, and B options." preferredStyle:UIAlertControllerStyleAlert];
 
         [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.placeholder = @"App name";
