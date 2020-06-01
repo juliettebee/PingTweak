@@ -220,4 +220,50 @@
 
         [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:nil];
     }
+    - (void)setActionColours {
+        // Creating alert with two text fields where user can enter the app name they want to change and the replacement
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set colour" message:@"255 RGB colours. To have default apple colour have 266 be the value for R,G, and B" preferredStyle:UIAlertControllerStyleAlert];
+
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = @"R";
+            textField.secureTextEntry = NO;
+            [textField setKeyboardType:UIKeyboardTypeNumberPad];
+        }];
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = @"G";
+            textField.secureTextEntry = NO;
+            [textField setKeyboardType:UIKeyboardTypeNumberPad];
+
+        }];
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = @"B";
+            textField.secureTextEntry = NO;
+            [textField setKeyboardType:UIKeyboardTypeNumberPad];
+
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            NSLog(@"Nothing");
+        }];
+
+        UIAlertAction *set = [UIAlertAction actionWithTitle:@"Set" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            // Saving
+            NSString *r = alertController.textFields[0].text;
+            NSString *g = alertController.textFields[1].text;
+            NSString *b = alertController.textFields[2].text;
+
+            NSDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/me.justnaaa.Pingpref.plist"] ?: [@{} mutableCopy];
+
+            [settings setValue:r forKey:@"actionRedAmount"];
+            [settings setValue:g forKey:@"actionGreenAmount"];
+            [settings setValue:b forKey:@"actionBlueAmount"];
+
+            [settings writeToFile:@"/var/mobile/Library/Preferences/me.justnaaa.Pingpref.plist" atomically:YES];
+
+        }];
+
+        [alertController addAction:cancel];
+        [alertController addAction:set];
+
+        [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:nil];
+    }
 @end

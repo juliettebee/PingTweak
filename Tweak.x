@@ -15,7 +15,7 @@ BOOL enabled;
         [transparent setHidden:YES];
         self.layer.cornerRadius = radius;
         int onTop = 1;
-
+        self.tag = 12;
 
         // Getting primary colour of app if enabled
         UIColor *color = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
@@ -73,7 +73,7 @@ BOOL enabled;
                 maskLayer.frame =sub.bounds;
                 maskLayer.path = maskPath.CGPath;
                 sub.layer.mask = maskLayer;
-sub.backgroundColor = color;
+                sub.backgroundColor = color;
 
             } else {
                 // Setting bottom radius
@@ -85,7 +85,7 @@ sub.backgroundColor = color;
                 maskLayer.frame = sub.bounds;
                 maskLayer.path = maskPath.CGPath;
                 sub.layer.mask = maskLayer;
-sub.backgroundColor = color;
+                sub.backgroundColor = color;
 
             }
             onTop = onTop + 1;
@@ -135,7 +135,15 @@ sub.backgroundColor = color;
     %hook NCNotificationListCellActionButton
         - (void)layoutSubviews {
             UIView *actionButton = self.subviews[0];
-            actionButton.backgroundColor = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
+
+            // Getting user defined colour
+            int r = [[settings objectForKey:@"actionRedAmount"] ?: @266 intValue];
+            int g = [[settings objectForKey:@"actionGreenAmount"] ?: @266 intValue];
+            int b = [[settings objectForKey:@"actionBlueAmount"] ?: @266 intValue];
+            // Check if its default
+            if (r <= 255 && g <= 255 && b <= 255) {
+                actionButton.backgroundColor = [UIColor colorWithRed:r / 255.0f green:g / 255.0f blue:b / 255.0f alpha:1.00];
+            }
             // Need to do it first or it flickers in
             %orig;
         }
