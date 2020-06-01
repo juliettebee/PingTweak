@@ -68,8 +68,7 @@ BOOL enabled;
                 // If so making it transparent
                 if (noTop) {
                     sub.opaque = false;
-                } else {
-                    if (noBottom) {
+                } else if (noBottom) {
                         // Setting upper radius
                         UIBezierPath *maskPath;
                         maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
@@ -80,6 +79,8 @@ BOOL enabled;
                         maskLayer.path = maskPath.CGPath;
                         sub.layer.mask = maskLayer;
                         sub.backgroundColor = color;
+                        sub.opaque = true;
+
                     } else {
                         // Setting upper radius
                         UIBezierPath *maskPath;
@@ -92,16 +93,22 @@ BOOL enabled;
                         sub.layer.mask = maskLayer;
                         sub.backgroundColor = color;
                     }
-                }
             } else {
                 // Setting bottom radius
                 UIBezierPath *maskPath;
                 // Seeing if user has enabled transparent top
                 // If so make the top and bottom transparent
                 if (noTop) {
-                    maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
-                                byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft | UIRectCornerTopRight |UIRectCornerTopLeft)
-                                                           cornerRadii:CGSizeMake(radius, radius)];
+
+                maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
+                                                 byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft | UIRectCornerTopRight |UIRectCornerTopLeft)
+                                                       cornerRadii:CGSizeMake(radius, radius)];
+                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                maskLayer.frame = sub.bounds;
+                maskLayer.path = maskPath.CGPath;
+                sub.layer.mask = maskLayer;
+                sub.backgroundColor = color;
+                sub.opaque = true;
                 } else if (noBottom){
                     sub.opaque = false;
                 } else {

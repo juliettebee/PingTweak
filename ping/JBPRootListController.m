@@ -12,7 +12,7 @@
 
     - (void)source {
         [[UIApplication sharedApplication]
-        openURL:[NSURL URLWithString:@"https://github.com"]
+        openURL:[NSURL URLWithString:@"https://github.com/justnaa/pingtweak"]
         options:@{}
     completionHandler:nil];
     }
