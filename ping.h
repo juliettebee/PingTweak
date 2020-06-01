@@ -42,3 +42,6 @@ BOOL titleChange;
 
 @interface NCNotificationListCellActionButton : UIControl
 @end
+
+@interface _UIMappedBitmapImage : UIImage
+@end

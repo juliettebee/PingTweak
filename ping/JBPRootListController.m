@@ -113,7 +113,7 @@
     }
 
     -(void) setTitlee {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set notification list title" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set notification list title" message:@"Set as space to set header as blank." preferredStyle:UIAlertControllerStyleAlert];
 
         [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.placeholder = @"Title";
@@ -128,7 +128,7 @@
             NSString *title = alertController.textFields[0].text;
             NSDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/me.justnaaa.Pingpref.plist"] ?: [@{} mutableCopy];
 
-            [settings setValue:title forKey:@"f"];
+            [settings setValue:title forKey:@"notificationsText"];
             [settings writeToFile:@"/var/mobile/Library/Preferences/me.justnaaa.Pingpref.plist" atomically:YES];
 
         }];
@@ -140,10 +140,10 @@
     }
 
     - (void) marginNotification {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set notification margin" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set notification radius" message:@"" preferredStyle:UIAlertControllerStyleAlert];
 
         [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.placeholder = @"Title";
+            textField.placeholder = @"Put in any number you want";
             textField.secureTextEntry = NO;
             [textField setKeyboardType:UIKeyboardTypeNumberPad];
         }];
@@ -168,7 +168,7 @@
     }
     - (void)perAppBannerColour {
         // Creating alert with two text fields where user can enter the app name they want to change and the replacement
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set colour for a specific app." message:@"255 RGB colours" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Set colour for a specific app." message:@"255 RGB colours. This only works if you have replace notification with app name disabled" preferredStyle:UIAlertControllerStyleAlert];
 
         [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.placeholder = @"App name";

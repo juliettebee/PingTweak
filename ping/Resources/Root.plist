@@ -26,13 +26,13 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>me.justnaaa.Pingpref</string>
 			<key>key</key>
 			<string>enableTitleChange</string>
 			<key>label</key>
-			<string>Replace notification app name with title.</string>
+			<string>Set banner colour to average app colour</string>
 		</dict>
 		<dict>
 			<key>cell</key>

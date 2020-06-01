@@ -6,20 +6,8 @@ BOOL enabled;
 %group ping
     %hook NCNotificationShortLookView
     - (void)layoutSubviews {
-        NSString *titlee = self.primaryText;
         NSString *appName = self.title;
 
-        // Checking if there's content in title, if not leaving default
-        if (titleChange) {
-                if ([titlee length] == 0) {
-
-                } else {
-                    self.title = titlee;
-                }
-                if ([self.secondaryText length] <= 2) {
-                    self.secondaryText = @"";
-                }
-        }
         %orig;
         // Setting background colour
         NSArray<__kindof UIView *> *subs = self.subviews;
@@ -31,16 +19,47 @@ BOOL enabled;
 
         int onTop = 1;
 
+
+        // Getting primary colour of app if enabled
+        UIColor *color = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
+        if (titleChange) {
+            // Yes I know the way I got the UIImageView isn't the best but it works.
+            UIImageView *img = (UIImageView *)[self viewWithTag:1];
+            UIImage *image = img.image;
+
+            CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+            unsigned char rgba[4];
+            CGContextRef context = CGBitmapContextCreate(rgba, 1, 1, 8, 4, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+
+            CGContextDrawImage(context, CGRectMake(0, 0, 1, 1), image.CGImage);
+            CGColorSpaceRelease(colorSpace);
+            CGContextRelease(context);
+
+            if(rgba[3] > 0) {
+                CGFloat alpha = ((CGFloat)rgba[3])/255.0;
+                CGFloat multiplier = alpha/255.0;
+                color = [UIColor colorWithRed:((CGFloat)rgba[0])*multiplier
+                        green:((CGFloat)rgba[1])*multiplier
+                        blue:((CGFloat)rgba[2])*multiplier
+                        alpha:1];
+            }
+            else {
+                color = [UIColor colorWithRed:((CGFloat)rgba[0])/255.0
+                    green:((CGFloat)rgba[1])/255.0
+                    blue:((CGFloat)rgba[2])/255.0
+                    alpha:1];
+            }
+        }
         // Getting user defined per app notification colour
         int thisred = [[settings objectForKey:[NSString stringWithFormat:@"redAmount%@", appName]] ?: @266 intValue];
         int thisgreen = [[settings objectForKey:[NSString stringWithFormat:@"greenAmount%@", appName]] ?: @266 intValue];
         int thisblue = [[settings objectForKey:[NSString stringWithFormat:@"blueAmount%@", appName]] ?: @266 intValue];
         // then checking if they're null (equal or above 266)
         if (thisred <= 255 && thisgreen <= 255 && thisblue <= 255) {
-                    red = thisred;
-                    green = thisgreen;
-                    blue = thisblue;
-                }
+            red = thisred;
+            green = thisgreen;
+            blue = thisblue;
+        }
         // Setting notification colour
 
         for (UIView *sub in subs) {
@@ -54,7 +73,8 @@ BOOL enabled;
                 maskLayer.frame =sub.bounds;
                 maskLayer.path = maskPath.CGPath;
                 sub.layer.mask = maskLayer;
-                sub.backgroundColor = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
+sub.backgroundColor = color;
+
             } else {
                 // Setting bottom radius
                 UIBezierPath *maskPath;
@@ -65,7 +85,9 @@ BOOL enabled;
                 maskLayer.frame = sub.bounds;
                 maskLayer.path = maskPath.CGPath;
                 sub.layer.mask = maskLayer;
-                sub.backgroundColor = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
+//                sub.backgroundColor = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
+sub.backgroundColor = color;
+
             }
             onTop = onTop + 1;
         }
@@ -75,7 +97,6 @@ BOOL enabled;
     }
     %end
 
-    // TODO: Add per app titles
 
     // Changing the notifications text
     %hook NCNotificationListHeaderTitleView
@@ -118,6 +139,13 @@ BOOL enabled;
             actionButton.backgroundColor = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
             // Need to do it first or it flickers in
             %orig;
+        }
+    %end
+    // This really isn't the best but it was the only solution that I could get working
+    %hook UIImageView
+        - (void)layoutSubviews {
+            %orig;
+            self.tag = 1;
         }
     %end
 %end
