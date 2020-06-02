@@ -67,7 +67,7 @@ BOOL enabled;
                 // Seeing if user has enabled transparent top
                 // If so making it transparent
                 if (noTop) {
-                    sub.opaque = false;
+                    sub.opaque = NO;
                 } else if (noBottom) {
                         // Setting upper radius
                         UIBezierPath *maskPath;
@@ -119,7 +119,9 @@ BOOL enabled;
                 }
                 // Seeing if bottom is disabled if so making it transparent
                 if (noBottom) {
-                    sub.opaque = false;
+                    // This line is needed for some reason. If it's not there it doesn't become transparent.
+                    sub.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.0];
+                    sub.opaque = NO;
                 }
             }
             onTop = onTop + 1;
