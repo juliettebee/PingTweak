@@ -79,8 +79,6 @@ BOOL enabled;
                         maskLayer.path = maskPath.CGPath;
                         sub.layer.mask = maskLayer;
                         sub.backgroundColor = color;
-                        sub.opaque = true;
-
                     } else {
                         // Setting upper radius
                         UIBezierPath *maskPath;
@@ -92,34 +90,36 @@ BOOL enabled;
                         maskLayer.path = maskPath.CGPath;
                         sub.layer.mask = maskLayer;
                         sub.backgroundColor = color;
-                    }
+                }
             } else {
                 // Setting bottom radius
                 UIBezierPath *maskPath;
-                // Seeing if user has enabled transparent top
-                // If so make the top and bottom transparent
-                if (noTop) {
 
+                // Setting default
                 maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
-                                                 byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft | UIRectCornerTopRight |UIRectCornerTopLeft)
+                                                 byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft)
                                                        cornerRadii:CGSizeMake(radius, radius)];
                 CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
                 maskLayer.frame = sub.bounds;
                 maskLayer.path = maskPath.CGPath;
                 sub.layer.mask = maskLayer;
                 sub.backgroundColor = color;
-                sub.opaque = true;
-                } else if (noBottom){
-                    sub.opaque = false;
-                } else {
+                // Seeing if user has enabled transparent top
+                // If so make the top and bottom transparent
+                if (noTop) {
+
                     maskPath = [UIBezierPath bezierPathWithRoundedRect:sub.bounds
-                                byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft)
+                                                     byRoundingCorners:(UIRectCornerBottomRight | UIRectCornerBottomLeft | UIRectCornerTopRight |UIRectCornerTopLeft)
                                                            cornerRadii:CGSizeMake(radius, radius)];
                     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
                     maskLayer.frame = sub.bounds;
                     maskLayer.path = maskPath.CGPath;
                     sub.layer.mask = maskLayer;
                     sub.backgroundColor = color;
+                }
+                // Seeing if bottom is disabled if so making it transparent
+                if (noBottom) {
+                    sub.opaque = false;
                 }
             }
             onTop = onTop + 1;
