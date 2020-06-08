@@ -2,7 +2,6 @@
 #import <AudioToolbox/AudioServices.h>
 BOOL enabled;
 
-
 %group ping
     %hook NCNotificationShortLookView
     - (void)layoutSubviews {
@@ -18,11 +17,19 @@ BOOL enabled;
         self.tag = 12;
 
         // Getting primary colour of app if enabled
+
+        // Thank you so much @bengiannis
         UIColor *color = [UIColor colorWithRed:red / 255.0f green:green / 255.0f blue:blue / 255.0f alpha:1.00];
         if (titleChange) {
-            // Yes I know the way I got the UIImageView isn't the best but it works.
-            UIImageView *img = (UIImageView *)[self viewWithTag:1];
-            UIImage *image = img.image;
+            UIImage *image = nil;
+            for (PLPlatterHeaderContentView *subview in self.subviews) {
+                if ([subview isKindOfClass:[%c(PLPlatterHeaderContentView) class]]) {
+                    if ([subview icons].count > 0) {
+                        image = [[subview icons] firstObject];
+                        break;
+                    }
+                }
+            }
 
             CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
             unsigned char rgba[4];
@@ -182,13 +189,6 @@ BOOL enabled;
             }
             // Need to do it first or it flickers in
             %orig;
-        }
-    %end
-    // This really isn't the best but it was the only solution that I could get working
-    %hook UIImageView
-        - (void)layoutSubviews {
-            %orig;
-            self.tag = 1;
         }
     %end
 %end

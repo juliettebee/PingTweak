@@ -41,6 +41,7 @@ BOOL noBottom;
 @end
 
 @interface PLPlatterHeaderContentView : UIView
+    @property (nonatomic,copy) NSArray * icons;
 @end
 
 @interface NCNotificationListCellActionButton : UIControl
